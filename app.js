@@ -1,17 +1,39 @@
-const http = require('http');
+const { response } = require('express');
+const express = require('express');
 
-const hostname = 'localhost';
-const port = 3000;
+const app = express();
 
-const serverListener = (req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/html');
-  res.write(`<html><body><div>hello world</div></body></html>`);
-  res.end('');
-}
+app.use(express.json());
 
-const server = http.createServer(serverListener);
+// app.use((request, response, next)=> {
+//   let body = '';
+//   request.on('data', (chunk) => {
+//     body += chunk;
+//   });
+//   request.on('end', () => {
+//     request.body = JSON.parse(body);
+//     next();
+//   })
+// })
 
-server.listen(port, hostname, () => {
-  console.log('server started');
+
+app.use((req, res, next) => {
+  console.log('request recieved: ' +  req.url);
+  console.log('request.body:', req.body);
+  next();
 });
+
+app.use('/hello', (request, response) => {
+  response.end('hello world');
+});
+
+app.use('/about', (req, res) => {
+  res.end('this is an about page');
+});
+
+app.use((req, res) => {
+  res.statusCode = 404;
+  res.end('default');
+})
+
+app.listen(999);
