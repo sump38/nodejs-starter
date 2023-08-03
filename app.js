@@ -28,6 +28,8 @@ const products = [
   },
 ];
 
+const cart = [];
+
 
 // function getProductsPage(req, res) {
 //   res.sendFile(__dirname + '/public/index.html');
@@ -51,6 +53,17 @@ app.use(express.json());
 app.get('/products', (req, res) => {
   res.json(products);
 });
+
+app.post('/cart', (req, res) => {
+  const product = req.body;
+  cart.push(product);
+  res.json(cart);
+});
+
+app.get('/cart', (req, res) => { 
+  res.json(cart);
+});
+
 
 
 
