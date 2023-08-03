@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const { application } = require('express');
 const app = express();
 
@@ -28,7 +29,7 @@ const products = [
   },
 ];
 
-const cart = [];
+const users = [];
 
 
 // function getProductsPage(req, res) {
@@ -46,6 +47,27 @@ const cart = [];
 
 app.use(cors());
 
+
+
+
+
+app.use(cookieParser());
+
+app.use((req, res, next) => {
+  if(!req.cookies.cartID) {
+    const user = {
+      id: users.length,
+      cart: []
+    }
+    users.push(user);
+    res.cookie('cartID', user.id, {
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      httpOnly: true
+    });
+  }
+  next();
+})
+
 app.use(express.static('public'));
 
 app.use(express.json());
@@ -55,12 +77,16 @@ app.get('/products', (req, res) => {
 });
 
 app.post('/cart', (req, res) => {
+  const cartID = req.cookies.cartID;
+  const cart = users.find(user => user.id == cartID).cart;
   const product = req.body;
   cart.push(product);
   res.json(cart);
 });
 
 app.get('/cart', (req, res) => { 
+  const cartID = req.cookies.cartID;
+  const cart = users.find(user => user.id == cartID).cart;
   res.json(cart);
 });
 
