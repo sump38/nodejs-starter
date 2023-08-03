@@ -17,7 +17,8 @@ app.use(express.json());
 // })
 
 
-app.use((req, res, next) => {
+app.use((req, res, next) => { //use postman some request to node //for example to check username and pasword ,always going to work
+
   console.log('request recieved: ' +  req.url);
   console.log('request.body:', req.body);
   next();
@@ -33,7 +34,12 @@ app.use('/about', (req, res) => {
 
 app.use((req, res) => {
   res.statusCode = 404;
+  console.log("the req body is =",req.body);
   res.end('default');
+  
 })
 
-app.listen(999);
+app.listen(999 , () => { //w/e father has the child has and know even makes it better
+
+// debugger;
+});
