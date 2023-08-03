@@ -1,4 +1,3 @@
-const { response } = require('express');
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -14,8 +13,10 @@ const drinks = [
 
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-app.use(cors());
+// app.use(express.urlencoded({extended: true}));
+// app.use(cors({
+//   origin: 'http://127.0.0.1:5500',
+// }));
 
 
 // app.use((request, response, next)=> {
@@ -45,11 +46,11 @@ app.use('/:id/abc/:name-:lastname', (request, response) => {
 
 
 app.use('/hello/world', (req, res) => {
-  res.end('hello helloworld');
+  res.send('hello world');
 });
 
 
-app.get('/drinks', (req, res) => {
+app.get('/drinks', cors(), (req, res) => {
   res.json(drinks);
 });
 
