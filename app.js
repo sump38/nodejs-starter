@@ -1,9 +1,22 @@
 const { response } = require('express');
 const express = require('express');
-
+const cors = require('cors');
 const app = express();
 
+//list of drinks
+const drinks = [
+  {name: 'coffee', price: 2},
+  {name: 'tea', price: 2},
+  {name: 'lemonade', price: 3},
+  {name: 'coke', price: 2},
+];
+
+
+
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use(cors());
+
 
 // app.use((request, response, next)=> {
 //   let body = '';
@@ -24,12 +37,25 @@ app.use((req, res, next) => { //use postman some request to node //for example t
   next();
 });
 
-app.use('/hello', (request, response) => {
+app.use('/:id/abc/:name-:lastname', (request, response) => {
+  console.log(request.url);
+  const fullUrl = 'hello/' + request.url;
   response.end('hello world');
 });
 
-app.use('/about', (req, res) => {
-  res.end('this is an about page');
+
+
+app.use('/hello/world', (req, res) => {
+  res.end('hello helloworld');
+});
+
+
+app.get('/drinks', (req, res) => {
+  res.json(drinks);
+});
+
+app.get('/about', (req, res) => {
+  res.sendFile(__dirname + '/public/about.html');
 });
 
 app.use((req, res) => {
