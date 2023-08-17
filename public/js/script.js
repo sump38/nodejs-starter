@@ -1,10 +1,10 @@
 //document load function
 window.addEventListener('load', function () {
-    fetch('http://localhost:3001/products').then(res => res.json()).then((products) => {
+    fetch('http://localhost:3001/api/products').then(res => res.json()).then((products) => {
         loadProducts(products);
     });
 
-    fetch('http://localhost:3001/cart').then(res => res.json()).then((cart) => {
+    fetch('http://localhost:3001/api/cart').then(res => res.json()).then((cart) => {
         renderCart(cart);
     });
 
@@ -49,7 +49,7 @@ function loadProducts(products) {
 }
 
 function addToCart(product) {
-    fetch('http://localhost:3001/cart', {
+    fetch('http://localhost:3001/api/cart/update', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ function addToCart(product) {
         })
     }).then(res => res.json()).then((cart) => {
         renderCart(cart);
-    });    
+    });
 }
 
 function login(user, password) {
@@ -74,5 +74,5 @@ function login(user, password) {
         method: 'POST'
     }).then(res => res.json()).then(data => {
         console.log(data);
-    })
+    });
 }
