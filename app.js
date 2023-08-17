@@ -3,47 +3,23 @@ const cors = require('cors');
 // const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const app = express();
+const cartRouter = require('./api/cart/cart.router');
 
 // list of products
-const products = [
+const products = require('./data/products');
+
+const users = [
   {
-    id: 1,
-    name: 'product 1',
-    price: 100,
-    description: 'this is product 1',
-    amount: 99
+    name: 'Moshe',
+    cart: [],
+    password: 'abcd'
   },
   {
-    id: 2,
-    name: 'product 2',
-    price: 200,
-    description: 'this is product 2',
-    amount: 99
-  },
-  {
-    id: 3,
-    name: 'product 3',
-    price: 300,
-    description: 'this is product 3',
-    amount: 99
-  },
+    name: 'Yishay',
+    password: '1234',
+    cart: []
+  }
 ];
-
-const users = [];
-
-
-// function getProductsPage(req, res) {
-//   res.sendFile(__dirname + '/public/index.html');
-// }
-
-
-// app.get('/style.css', (req, res) => {
-//   res.sendFile(__dirname + '/public/style.css');
-// })
-// app.get('/', getProductsPage);
-
-// app.get('/index.html', getProductsPage);
-  
 
 app.use(cors());
 
@@ -55,31 +31,35 @@ app.use(session({
 
 app.use((req, res, next) => {
   if(!req.session.cart) {
-    req.session.cart = [];
+    req.session.cart = users[0].cart;
   }
+  req.session.users = users;
   next();
-})
+});
+
+app.use('/api/cart', cartRouter);
 
 
+app.post('/login', (req, res) => {
+  //proccess user and password
+  const userLoginMock = {
+    name: 'Moshe',
+    password: 'abcd'
+  };
+  const userData = users.find(user => {
+    return (user.name === userLoginMock.name && user.password === userLoginMock.password);
+  });
 
+  if(userData) {
+    req.session.loggedIn = true;
+    req.session.user = userData;
+    req.session.cart = userData.cart;
+    res.json(userData.cart);
+  } else {
+    res.status(401).json('Error occured');
+  }
 
-
-// app.use(cookieParser('ab4qdd1'));
-
-// app.use((req, res, next) => {
-//   if(!req.cookies.cartID) {
-//     const user = {
-//       id: users.length,
-//       cart: []
-//     }
-//     users.push(user);
-//     res.cookie('cartID', user.id, {
-//       maxAge: 1000 * 60 * 60 * 24 * 7,
-//       httpOnly: true
-//     });
-//   }
-//   next();
-// })
+});
 
 app.use(express.static('public'));
 
@@ -91,13 +71,14 @@ app.get('/products', (req, res) => {
 
 app.post('/cart', (req, res) => {
   const product = req.body;
-  const cart = req.session.cart;
+  const cart = req.session.users[0].cart;
   cart.push(product);
   res.json(cart);
 });
 
 app.get('/cart', (req, res) => {
-  res.json(req.session.cart);
+  console.log(users);
+  res.json(req.session.users[0].cart);
 });
 
 
@@ -108,5 +89,5 @@ app.use((req, res) => {
   res.end('default'); 
 })
 
-app.listen(999, () => {
+app.listen(3001, () => {
 });
