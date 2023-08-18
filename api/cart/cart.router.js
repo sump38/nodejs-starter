@@ -6,24 +6,11 @@ const router = express.Router();
 
 router.use((req, res, next) => {
   if (req.session.user) {
-    console.log('user has cart');
-    console.log('session cart', req.session.user.cart);
-    console.log('user cart', users[0].cart);
-    req.session.cart = req.session.user.cart;
-  } else {
-    if (!req.session.cart) {
-      req.session.cart = [];
-    }
+    req.session.cart = users[0].cart;
+  } 
+  if (!req.session.cart) {
+    req.session.cart = [];
   }
-
-
-  // if (!req.session.cart) {
-  //   if (req.session.user) {
-  //     req.session.cart = req.session.user.cart;
-  //   } else {
-  //     req.session.cart = [];
-  //   }
-  // }
   next();
 });
 
