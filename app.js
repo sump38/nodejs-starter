@@ -18,6 +18,11 @@ app.use(session({
   saveUninitialized: true,
 }));
 
+app.use((req, res, next) => {
+  console.log(req.session.id);
+  next();
+});
+
 app.use(express.static('public'));
 
 app.use(authRouter);
