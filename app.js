@@ -4,6 +4,23 @@ const session = require('express-session');
 const app = express();
 const apiRouter = require('./api/api');
 const authRouter = require('./auth/auth.router');
+const { MongoClient } = require('mongodb');
+
+
+const uri = "mongodb+srv://sump38:FbDQUiB8XWiJOpxi@shop.1apuisl.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri);
+
+client.connect().then((c) => {
+  const db = c.db('shop');
+  //get product list from db
+  const products = db.collection('products');
+  products.find().toArray().then((products) => {
+    console.log(products);
+  });
+});
+
+
+
 
 
 // list of products
