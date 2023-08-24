@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const carts = [];
 
 class Cart {
@@ -51,11 +53,22 @@ class Cart {
 
     save() {
         if (this.userID) {
-            const cartIndex = carts.findIndex(cart => cart.userID === this.userID);
-            if (cartIndex === -1) {
-                carts.push(this);
-            } else {
-                carts[cartIndex] = this;
+            try {
+                const cartsFile = fs.readFileSync('data/carts.json', 'utf8');
+                const carts = JSON.parse(cartsFile);
+                const cartIndex = carts.findIndex(cart => cart.userID === this.userID);
+                if (cartIndex === -1) {
+                    carts.push(this);
+                } else {
+                    carts[cartIndex] = this;
+                }
+                fs.writeFileSync('data/carts.json', JSON.stringify(carts));
+            }
+            catch (err) {
+                console.log(err);
+            }
+            finally {
+                console.log('carts saved');
             }
         }
     }
