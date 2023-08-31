@@ -1,12 +1,14 @@
+const { log } = require('console');
 const fs = require('fs');
 
-const carts = [];
+const _carts = [];
 
 class Cart {
     constructor(userID, products) {
         this.userID = userID;
         this.products = [];
         if (userID) {
+            const carts = this.getCarts();
             const cartIndex = carts.findIndex(cart => cart.userID === userID);
             if (cartIndex !== -1) {
                 this.products = carts[cartIndex].products;
@@ -28,6 +30,21 @@ class Cart {
     clear() {
         this.products = [];
         this.save();
+    }
+
+    getCarts() {
+        try {
+            const cartsFile = fs.readFileSync('data/carts.json', 'utf8');
+            const carts = JSON.parse(cartsFile);
+            return carts;
+        }
+        catch (err) {
+            console.log(err);
+            return [];
+        }
+        finally {
+        }
+
     }
 
     updateProduct(product) {
@@ -54,8 +71,7 @@ class Cart {
     save() {
         if (this.userID) {
             try {
-                const cartsFile = fs.readFileSync('data/carts.json', 'utf8');
-                const carts = JSON.parse(cartsFile);
+                const carts = this.getCarts();
                 const cartIndex = carts.findIndex(cart => cart.userID === this.userID);
                 if (cartIndex === -1) {
                     carts.push(this);
@@ -70,6 +86,8 @@ class Cart {
             finally {
                 console.log('carts saved');
             }
+        } else {
+            console.log('no user found, not saving cart');
         }
     }
 }
