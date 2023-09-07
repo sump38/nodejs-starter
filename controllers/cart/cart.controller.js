@@ -17,18 +17,18 @@ module.exports.clearCart = (req, res) => {
     res.json(req.session.cart.products);
 };
 
-module.exports.initCart = (req, res, next) => {
+module.exports.initCart = async (req, res, next) => {
     if (req.session.user) {
-        const newCart = new Cart(req.session.user.name);
+        const newCart = await Cart.getOrCreateCart(req.session.user.name);
         if (req.session.cart && req.session.cart.userID) {
             newCart.merge(req.session.cart);
         }
         req.session.cart = newCart;
     } else {
         if (!req.session.cart) {
-            req.session.cart = new Cart(null);
+            req.session.cart = await Cart.getOrCreateCart(null);
         } else {
-            req.session.cart = new Cart(null, req.session.cart.products);
+            req.session.cart = await Cart.getOrCreateCart(null, req.session.cart.products);
         }
     }
     next();

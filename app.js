@@ -4,6 +4,7 @@ const session = require('express-session');
 const app = express();
 const apiRouter = require('./api/api');
 const authRouter = require('./auth/auth.router');
+const { initDb } = require('./db/db');
 
 
 // list of products
@@ -34,6 +35,8 @@ app.use((err, req, res, next) => {
   res.send('Error occured: ' + err.message);
 });
 
-app.listen(3001, () => {
-  console.log('Server is running on port 3001');
+initDb(() => {
+  app.listen(3001, () => {
+    console.log('Server is running on port 3001');
+  });
 });
