@@ -1,1 +1,32 @@
-[{"userID":"Moshe","products":[{"name":"product 1","amount":99,"price":100},{"name":"product 2","amount":1,"price":200}]}]
+[
+    {
+        "userID": "Moshe",
+        "products": [
+            {
+                "name": "product 1",
+                "amount": 99,
+                "price": 100
+            },
+            {
+                "name": "product 2",
+                "amount": 1,
+                "price": 200
+            }
+        ]
+    },
+    {
+        "userID": "Yaakov",
+        "products": [
+            {
+                "name": "product 2",
+                "amount": 5,
+                "price": 100
+            },
+            {
+                "name": "product 3",
+                "amount": 4,
+                "price": 200
+            }
+        ]
+    }
+]

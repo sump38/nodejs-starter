@@ -54,6 +54,8 @@ class Cart {
         } else {
             if (product.amount === 0) {
                 this.removeProduct(productIndex);
+
+
             } else {
                 this.products[productIndex] = product;
             }
