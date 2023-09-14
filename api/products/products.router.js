@@ -1,10 +1,14 @@
 const express = require('express');
 const productsList = require('../../data/products');
+const { getDB } = require('../../db/db');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.json(productsList);
+router.get('/', async (req, res) => {
+    const db = getDB();
+    const collection = db.collection('products');
+    const products = await collection.find().toArray();
+    res.json(products);
 }
 );
 

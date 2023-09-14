@@ -4,6 +4,10 @@ const session = require('express-session');
 const app = express();
 const apiRouter = require('./api/api');
 const authRouter = require('./auth/auth.router');
+const { connectToDB } = require('./db/db');
+const config = require('dotenv').config();
+
+console.log(process.env.PORT);
 
 
 // list of products
@@ -34,6 +38,12 @@ app.use((err, req, res, next) => {
   res.send('Error occured: ' + err.message);
 });
 
-app.listen(3001, () => {
-  console.log('Server is running on port 3001');
+connectToDB(process.env.MONGODBURL, ({ client, err }) => {
+  if (err) {
+    throw err;
+  } else {
+    app.listen(process.env.PORT, () => {
+      console.log('server started');
+    });
+  }
 });
