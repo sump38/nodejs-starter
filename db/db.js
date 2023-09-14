@@ -14,9 +14,13 @@ const connectToDB = (connectionString, callback) => {
         console.log(err);
         callback({ client: null, err: err });
     };
-
 };
 
+
+/**
+ * 
+ * @returns {mongodb.Db}
+ */
 const getDB = () => {
     if (_db) {
         return _db;

@@ -38,12 +38,12 @@ app.use((err, req, res, next) => {
   res.send('Error occured: ' + err.message);
 });
 
-connectToDB(process.env.MONGODBURL, ({ client, err }) => {
+connectToDB(process.env.MONGODBURL, ({ err }) => {
   if (err) {
     throw err;
   } else {
     app.listen(process.env.PORT, () => {
-      console.log('server started');
+      console.log(`Server started on http://localhost:${process.env.PORT}`);
     });
   }
 });
