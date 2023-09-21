@@ -1,6 +1,4 @@
-const Product = require('../../model/product/product.model');
-
-
+const Product = require("../../model/product/product.model");
 
 const getProducts = async (req, res) => {
     const { page, amount } = req.query;
@@ -8,6 +6,13 @@ const getProducts = async (req, res) => {
     res.json(products);
 };
 
+const getProductsById = async (req, res) => {
+    const id = req.params.id;
+    const product = await Product.getProductById(id);
+    res.json(product);
+};
+
 module.exports = {
-    getProducts
+    getProducts,
+    getProductsById,
 };
